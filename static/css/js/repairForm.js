@@ -1,29 +1,13 @@
-// Basic Form Validation
-function validateForm(event) {
-    event.preventDefault();
-
-    let productName = document.getElementById('id_product_name').value.trim();
-    let problemDescription = document.getElementById('id_problem_description').value.trim();
-    let location = document.getElementById('id_location').value.trim();
-
-    if (!productName || !problemDescription || !location) {
-        alert("Please fill in all required fields.");
-        return false;
+// Repair form character count logic for problem description
+document.addEventListener("DOMContentLoaded", () => {
+    const problemDescription = document.querySelector("#id_problem_description");
+    const charCount = document.querySelector("#charCount");
+  
+    if (problemDescription) {
+      problemDescription.addEventListener("input", () => {
+        const currentLength = problemDescription.value.length;
+        charCount.textContent = `${currentLength}/500 characters used`;
+      });
     }
-
-    alert("Form successfully submitted!");
-    document.getElementById('repairForm').submit();
-}
-
-// Character Counter for Problem Description
-function updateCharCount() {
-    const maxChars = 500;
-    let currentLength = document.getElementById('id_problem_description').value.length;
-    let charCountDisplay = document.getElementById('charCount');
-    charCountDisplay.textContent = `${currentLength}/${maxChars} characters used`;
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('repairForm').addEventListener('submit', validateForm);
-    document.getElementById('id_problem_description').addEventListener('input', updateCharCount);
-});
+  });
+  
