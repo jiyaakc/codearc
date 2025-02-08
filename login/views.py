@@ -72,3 +72,17 @@ def verify_otp(request):
             return render(request, "verify_otp.html", {"error": "Invalid OTP. Please try again."})
     
     return render(request, "verify_otp.html")
+
+
+from .forms import ProductRegistrationForm
+
+def register_product(request):
+    if request.method == 'POST':
+        form = ProductRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('success')  # Redirect to a success page
+    else:
+        form = ProductRegistrationForm()
+    
+    return render(request, 'user_reg.html', {'form': form})
