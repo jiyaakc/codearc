@@ -117,11 +117,11 @@ def login_view(request):
 
 
 def display(request):
-         return render(request, "customer_home.html") 
-            
+        return render(request, "customer_home.html")
+
 
 def home(request):
-    return render(request, "home.html")            
+    return render(request, "home.html")
 
 
 

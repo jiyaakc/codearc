@@ -46,7 +46,7 @@ class AgentProfile(models.Model):
     pan_number = models.CharField(max_length=20, unique=True)
     type = models.CharField(max_length=50, choices=[('company', 'Company'), ('local', 'Local Repair Center')])
     company_name = models.CharField(max_length=255, blank=True, null=True)
-
+    location = models.CharField(max_length=255) 
 
 class Product(models.Model):
     user = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, blank=True, null=True)  # Link product to user
