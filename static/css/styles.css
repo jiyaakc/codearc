@@ -1,12 +1,12 @@
 /* Base Styles */
 body {
     font-family: Arial, sans-serif;
-    margin: 10px;
+    margin: 2%;
     background-color: #f4f4f9;
   }
   
   .form-container {
-    max-width: 400px;
+    max-width: 700px;
     margin: auto;
     background: white;
     padding: 20px;
@@ -15,7 +15,7 @@ body {
   }
   
   .form-container h2 {
-    text-align: center;
+    text-align: justify;
     margin-bottom: 20px;
   }
   
@@ -33,7 +33,7 @@ body {
   .form-group textarea,
   .form-group button {
     width: 100%;
-    padding: 10px;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
@@ -59,7 +59,7 @@ body {
     background: #007bff;
     color: white;
     border: none;
-    padding: 10px 15px;
+    width: 5px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
