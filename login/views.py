@@ -82,14 +82,8 @@ def login_view(request):
 
             # Redirect based on user type
             if hasattr(user, 'customerprofile'):
-                print('*'*50)
-                print("this is customer pro")
-                print('*'*50)
                 return render(request,"customer_home.html")  # Customer home page
             elif hasattr(user, 'agentprofile'):
-                print('*'*50)
-                print("thi si ajscdhs")
-                print('*'*50)
                 return render(request,"agent_home.html")  # Agent home page
             else:
                 messages.error(request, "Profile type not recognized.")
@@ -99,3 +93,5 @@ def login_view(request):
             messages.error(request, "Invalid email or password.")
 
     return render(request, "login.html")
+
+            
