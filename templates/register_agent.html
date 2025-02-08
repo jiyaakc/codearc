@@ -1,0 +1,13 @@
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="pan" placeholder="PAN Number" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+    <select name="type">
+        <option value="company">Company</option>
+        <option value="local">Local Repair Center</option>
+    </select>
+    <input type="text" name="company_name" placeholder="Company Name (Optional)">
+    <button type="submit">Sign Up</button>
+</form>
