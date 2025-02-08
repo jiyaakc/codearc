@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
 from django.contrib import messages
 
+
 otp_storage = {}
 
 def send_otp(email):
@@ -46,6 +47,18 @@ def register_agent(request):
         confirm_password = request.POST['confirm_password']
         type = request.POST['type']
         company_name = request.POST.get('company_name', '')
+
+        # PAN Validation Regex
+        pan_pattern = r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"
+        if not re.match(pan_pattern, pan_number):
+            messages.error(request, "Invalid PAN number format! Example: ABCDE1234F")
+            return redirect('register_agent')  # Stop here and show error
+
+        # Check if email already exists
+        if CustomUser.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists. Please use a different email.")
+            return redirect('register_agent')  # Stop here and show error
+
 
         if password != confirm_password:
             return JsonResponse({"error": "Passwords do not match"}, status=400)
@@ -99,3 +112,26 @@ def login_view(request):
 
 def home(request):
     return render(request, "home.html")            
+
+
+
+from .models import Agent
+import re
+
+def agent_signup(request):
+    if request.method == "POST":
+        pan_number = request.POST.get("pan").upper()  # Convert to uppercase
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        pattern = r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"
+        if not re.match(pattern, pan_number):
+            messages.error(request, "Invalid PAN number format. Example: ABCDE1234F")
+            return redirect("agent_signup")
+
+        # Save if PAN is valid
+        Agent.objects.create(pan_number=pan_number, email=email, password=password)
+        messages.success(request, "Signup successful!")
+        return redirect("login")
+
+    return render(request, "signup.html")

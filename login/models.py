@@ -1,5 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from django.db import models
+import re
+from django.core.exceptions import ValidationError
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -48,4 +51,12 @@ class AgentProfile(models.Model):
 
 
 
+def validate_pan(value):
+    pattern = r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"
+    if not re.match(pattern, value):
+        raise ValidationError("Invalid PAN number format. Example: ABCDE1234F")
 
+class Agent(models.Model):
+    pan_number = models.CharField(max_length=10, unique=True, validators=[validate_pan])
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=255)
