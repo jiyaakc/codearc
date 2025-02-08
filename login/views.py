@@ -1,88 +1,97 @@
-from django.shortcuts import render, redirect
-from django.core.mail import send_mail
-from django.contrib.sessions.models import Session
 import random
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.core.mail import send_mail
+from .models import CustomUser, CustomerProfile, AgentProfile
+from django.contrib.auth.hashers import make_password
+from django.http import JsonResponse
+from django.contrib import messages
 
-from . models import UserDetail
+otp_storage = {}
 
+def send_otp(email):
+    otp = random.randint(100000, 999999)
+    otp_storage[email] = otp
+    send_mail(
+        'Your OTP Code',
+        f'Your OTP is {otp}',
+        'noreply@unirepair.com',
+        [email],
+        fail_silently=False,
+    )
 
-# Create your views here.
-
-
-# Create your views here.
-def signup(request):
+def register_customer(request):
     if request.method == "POST":
-        UserName = request.POST.get("username")
-        Email = request.POST.get("email")
-        Password = request.POST.get("password")
-        ConPassword = request.POST.get("confirm-password")
-        
-        if Password != ConPassword:
-            return render(request, "signup.html", {"error": "Passwords do not match."})
-        
-        # Check if the username or email already exists
-        if UserDetail.objects.filter(UserName=UserName).exists():
-            return render(request, "signup.html", {"error": "Username already exists."})
-        elif UserDetail.objects.filter(Email=Email).exists():
-            return render(request, "signup.html", {"error": "Email already exists."})
-        
-        # Generate OTP and save user data temporarily in the session
-        otp = random.randint(100000, 999999)
-        request.session['temp_user'] = {
-            "UserName": UserName,
-            "Email": Email,
-            "Password": Password,
-            "OTP": otp
-        }
-        
-        # Send OTP to the user's email
-        send_mail(
-            subject="Your OTP for Signup",
-            message=f"Your OTP for completing signup is {otp}.",
-            from_email="shadishirin5678@gmail.com",
-            recipient_list=[Email],
-        )
-        
-        # Redirect to OTP verification page
-        return redirect("verify_otp")
-    
-    return render(request, "signup.html")
+        name = request.POST['name']
+        email = request.POST['email']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
 
+        if password != confirm_password:
+            return JsonResponse({"error": "Passwords do not match"}, status=400)
 
+        send_otp(email)  # Send OTP
+        request.session['signup_data'] = {'name': name, 'email': email, 'password': password}
+        return redirect('verify_otp')
+    return render(request, 'register_customer.html')
+
+def register_agent(request):
+    if request.method == "POST":
+        pan_number = request.POST['pan']
+        email = request.POST['email']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+        type = request.POST['type']
+        company_name = request.POST.get('company_name', '')
+
+        if password != confirm_password:
+            return JsonResponse({"error": "Passwords do not match"}, status=400)
+
+        send_otp(email)  # Send OTP
+        request.session['signup_data'] = {'pan': pan_number, 'email': email, 'password': password, 'type': type, 'company_name': company_name}
+        return redirect('verify_otp')
+    return render(request, 'register_agent.html')
 
 def verify_otp(request):
     if request.method == "POST":
-        entered_otp = request.POST.get("otp")
-        temp_user = request.session.get("temp_user", None)
-        
-        if temp_user and str(temp_user["OTP"]) == entered_otp:
-            # Save the user to the database
-            user = UserDetail(
-                UserName=temp_user["UserName"],
-                Email=temp_user["Email"],
-                Password=temp_user["Password"]
-            )
-            user.save()
-            
-            # Clear the session
-            del request.session["temp_user"]
-            
-            return render(request, "success.html", {"message": "Account created successfully!"})
+        email = request.session['signup_data']['email']
+        entered_otp = int(request.POST['otp'])
+
+        if email in otp_storage and otp_storage[email] == entered_otp:
+            data = request.session.pop('signup_data')
+
+            user = CustomUser.objects.create(email=data['email'], password=make_password(data['password']))
+            if 'name' in data:
+                CustomerProfile.objects.create(user=user, name=data['name'])
+            else:
+                AgentProfile.objects.create(user=user, pan_number=data['pan'], type=data['type'], company_name=data['company_name'])
+
+            return redirect('login')
         else:
-            return render(request, "verify_otp.html", {"error": "Invalid OTP. Please try again."})
-    
-    return render(request, "verify_otp.html")
+            return JsonResponse({"error": "Invalid OTP"}, status=400)
+    return render(request, 'verify_otp.html')
 
+def login_view(request):
+    if request.method == "POST":
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(request, email=email, password=password)
 
-from .forms import ProductRegistrationForm
+        if user is not None:
+            login(request, user)
 
-def register_product(request):
-    if request.method == 'POST':
-        form = ProductRegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('success')  # Redirect to a success page
-    else:
-        form = ProductRegistrationForm()
-    
-    return render(request, 'user_reg.html', {'form': form})
+            # Redirect based on user type
+            if hasattr(user, 'customerprofile'):
+                return render(request,"customer_home.html")  # Customer home page
+            elif hasattr(user, 'agentprofile'):
+                return render(request,"agent_home.html")  # Agent home page
+            else:
+                messages.error(request, "Profile type not recognized.")
+                return redirect("login")
+
+        else:
+            messages.error(request, "Invalid email or password.")
+
+    return render(request, "login.html")
+
+            

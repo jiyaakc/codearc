@@ -1,14 +1,13 @@
 
-from django.contrib import admin
 from django.urls import path
-from . import views
-from django.shortcuts import render
-
+from .views import register_customer, register_agent, verify_otp, login_view
 
 urlpatterns = [
-    path('signup/', views.signup,name='signup'),
-    path('verify_otp/',views.verify_otp,name='verify_otp'),
-     path('register-product/', views.register_product, name='register_product'),
-    path('success/', lambda request: render(request, 'success.html'), name='success'),
-    #path('home/', )
+    path('register/customer/', register_customer, name='register_customer'),
+    path('register/agent/', register_agent, name='register_agent'),
+    path('verify-otp/', verify_otp, name='verify_otp'),
+    path('login/', login_view, name='login'),
+
+
+
 ]
