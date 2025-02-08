@@ -1,15 +1,19 @@
 from django import forms
+
 from .models import ProductRegistration
 import re
 
-class ProductRegistrationForm(forms.ModelForm):
-    purchase_date = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date'})
-    )
+from .models import Product
 
+
+class ProductRegistrationForm(forms.ModelForm):
     class Meta:
-        model = ProductRegistration
-        fields = ['product_name', 'model_number', 'purchase_date', 'warranty_status']
+        model = Product
+        fields = ['product_name', 'brand', 'model_number', 'serial_number', 'purchase_date', 'warranty_period']
+        widgets = {
+            'purchase_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
 
 
 

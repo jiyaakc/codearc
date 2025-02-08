@@ -36,10 +36,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-
 class CustomerProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+
 
 class AgentProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -48,6 +48,15 @@ class AgentProfile(models.Model):
     company_name = models.CharField(max_length=255, blank=True, null=True)
 
 
+class Product(models.Model):
+    user = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, blank=True, null=True)  # Link product to user
+    product_name = models.CharField(max_length=255)
+    brand = models.CharField(max_length=100)
+    model_number = models.CharField(max_length=100)
+    serial_number = models.CharField(max_length=100, unique=True)
+    purchase_date = models.DateField()
+    warranty_period = models.IntegerField(help_text="Warranty in months")
+
 
 
 
@@ -55,6 +64,10 @@ def validate_pan(value):
     pattern = r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"
     if not re.match(pattern, value):
         raise ValidationError("Invalid PAN number format. Example: ABCDE1234F")
+
+    def __str__(self):
+        return f"{self.product_name} - {self.user.email}"
+
 
 class Agent(models.Model):
     pan_number = models.CharField(max_length=10, unique=True, validators=[validate_pan])
