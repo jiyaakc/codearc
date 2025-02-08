@@ -27,6 +27,9 @@ def register_customer(request):
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
 
+        if CustomUser.objects.filter(email=email).exists():
+            return JsonResponse({"error": "Email already exists"}, status=400)
+
         if password != confirm_password:
             return JsonResponse({"error": "Passwords do not match"}, status=400)
 

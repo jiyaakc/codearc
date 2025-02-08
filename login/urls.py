@@ -7,5 +7,5 @@ urlpatterns = [
     path('register/agent/', register_agent, name='register_agent'),
     path('verify-otp/', verify_otp, name='verify_otp'),
     path('login/', login_view, name='login'),
-    path('home/',home,name='home')
+    path('',home,name='home')
 ]
