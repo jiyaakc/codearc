@@ -1,0 +1,72 @@
+/* Style for Repair Request Container */
+.container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  label {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  input[type="text"],
+  textarea,
+  input[type="file"] {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  textarea {
+    min-height: 100px;
+  }
+  
+  input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #45a049;
+  }
+  
+  .search-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .search-wrapper input[type="text"] {
+    flex-grow: 1;
+  }
+  
+  .search-wrapper img {
+    width: 20px;
+    cursor: pointer;
+  }
+  
