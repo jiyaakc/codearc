@@ -1,8 +1,5 @@
 from django import forms
-
-from .models import ProductRegistration
 import re
-
 from .models import Product
 
 

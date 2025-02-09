@@ -58,8 +58,6 @@ class Product(models.Model):
     warranty_period = models.IntegerField(help_text="Warranty in months")
 
 
-
-
 def validate_pan(value):
     pattern = r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"
     if not re.match(pattern, value):

@@ -44,6 +44,7 @@ def register_customer(request):
         return redirect('verify_otp')
     return render(request, 'register_customer.html')
 
+
 def register_agent(request):
     if request.method == "POST":
         pan_number = request.POST['pan']
@@ -73,6 +74,7 @@ def register_agent(request):
         return redirect('verify_otp')
     return render(request, 'register_agent.html')
 
+
 def verify_otp(request):
     if request.method == "POST":
         email = request.session['signup_data']['email']
@@ -92,6 +94,7 @@ def verify_otp(request):
             return JsonResponse({"error": "Invalid OTP"}, status=400)
     return render(request, 'verify_otp.html')
 
+
 def login_view(request):
     if request.method == "POST":
         email = request.POST['email']
@@ -103,7 +106,8 @@ def login_view(request):
 
             # Redirect based on user type
             if hasattr(user, 'customerprofile'):
-                return render(request,"customer_home.html")  # Customer home page
+                user_name = request.user.customerprofile.name
+                return render(request,"customer_home.html", {'name': user_name})  # Customer home page
             elif hasattr(user, 'agentprofile'):
                 return render(request,"agent_home.html")  # Agent home page
             else:
@@ -115,16 +119,14 @@ def login_view(request):
 
     return render(request, "login.html")
 
+
 def display(request):
          return render(request, "customer_home.html") 
+
+
 def disp(request):
         return render(request,"agent_home.html")
-
-
-
-def display(request):
-         return render(request, "customer_home.html") 
-            
+         
 
 def home(request):
     return render(request, "home.html")            
@@ -154,18 +156,20 @@ def agent_signup(request):
 
     return render(request, "signup.html")
 
+
 def register_product(request):
     if request.method == "POST":
         form = ProductRegistrationForm(request.POST)
         if form.is_valid():
             product = form.save(commit=False)
-            product.user = request.user  # Link product to logged-in user
+            product.user = request.user.customerprofile  # Link product to logged-in user
             product.save()
-            return redirect('product-list')  # Redirect to product list page
-    return render(request, 'product_list.html')
+            return redirect('product-list')
+    form = ProductRegistrationForm()
+    return render(request, 'product_reg.html', {'form': form})
 
 
 def product_list(request):
-    products = Product.objects.filter(user=request.user)
+    products = Product.objects.filter(user=request.user.customerprofile)
     return render(request, 'product_list.html', {'products': products})
 
