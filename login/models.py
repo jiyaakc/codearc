@@ -33,10 +33,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-
 class CustomerProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+
 
 class AgentProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
