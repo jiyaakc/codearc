@@ -2,7 +2,7 @@
     "builds": [{
         "src": "unirepair/wsgi.py",
         "use": "@vercel/python",
-        "config": { "maxLambdaSize": "15mb", "runtime": "python3.12.3", "maxDuration": 30 }
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.13.1", "maxDuration": 30 }
     }],
     "routes": [
         {
