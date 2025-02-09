@@ -90,7 +90,8 @@ def login_view(request):
 
             # Redirect based on user type
             if hasattr(user, 'customerprofile'):
-                return render(request,"customer_home.html")  # Customer home page
+                user_name = request.user.customerprofile.name
+                return render(request,"customer_home.html",  {'name': user_name})  # Customer home page
             elif hasattr(user, 'agentprofile'):
                 return render(request,"agent_home.html")  # Agent home page
             else:
@@ -104,7 +105,9 @@ def login_view(request):
 
 
 def display(request):
-         return render(request, "customer_home.html") 
+    user_name = request.user.customerprofile.name
+    
+    return render(request, "customer_home.html", {'name': user_name}) 
             
 
 def home(request):
@@ -116,13 +119,14 @@ def register_product(request):
         form = ProductRegistrationForm(request.POST)
         if form.is_valid():
             product = form.save(commit=False)
-            product.user = request.user  # Link product to logged-in user
+            product.user = request.user.customerprofile  # Link product to logged-in user
             product.save()
             return redirect('product-list')  # Redirect to product list page
-    return render(request, 'product_list.html')
+    form = ProductRegistrationForm()
+    return render(request, 'product_reg.html',{'form': form})
 
 
 def product_list(request):
-    products = Product.objects.filter(user=request.user)
+    products = Product.objects.filter(user=request.user.customerprofile)
     return render(request, 'product_list.html', {'products': products})
 
