@@ -1,5 +1,6 @@
 from django.contrib import admin
-from . models import UserDetail
-# Register your models here.
+from .models import *
 
-admin.site.register(UserDetail)
+admin.site.register(CustomUser)
+admin.site.register(CustomerProfile)
+admin.site.register(AgentProfile)

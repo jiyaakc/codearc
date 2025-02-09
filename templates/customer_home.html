@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Home</title>
+
+  <!-- Font Awesome for Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f9f9f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .user-icon {
+      font-size: 40px;
+      color: #00796b;
+      margin-bottom: 10px;
+    }
+
+    .icon-box {
+      margin: 15px 0;
+    }
+
+    .box-content {
+      background: #e0f7fa;
+      padding: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      text-align: center;
+    }
+
+    .box-content:hover {
+      background-color: #b2ebf2;
+    }
+
+    .box-content p {
+      font-size: 18px;
+      color: #00796b;
+    }
+
+    .box-content a {
+      text-decoration: none;
+      color: inherit;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <i class="fas fa-user user-icon"></i>
+    <h2>Welcome, Customer</h2>
+
+    <div class="icon-box">
+      <div class="box-content">
+        <p><a href="/display-products">Display Registered Products</a></p>
+      </div>
+    </div>
+
+    <div class="icon-box">
+      <div class="box-content">
+        <p><a href="/register-product">Register a Product</a></p>
+      </
