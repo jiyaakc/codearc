@@ -6,6 +6,11 @@ from .models import CustomUser, CustomerProfile, AgentProfile
 from django.contrib.auth.hashers import make_password
 from django.http import JsonResponse
 from django.contrib import messages
+from .forms import ProductRegistrationForm
+from django.contrib.auth.decorators import login_required
+from .models import Product
+
+
 
 
 otp_storage = {}
@@ -110,8 +115,14 @@ def login_view(request):
 
     return render(request, "login.html")
 
+
+def display(request):
+         return render(request, "customer_home.html") 
+            
+
 def home(request):
     return render(request, "home.html")            
+
 
 
 
@@ -135,3 +146,20 @@ def agent_signup(request):
         return redirect("login")
 
     return render(request, "signup.html")
+
+def register_product(request):
+    if request.method == "POST":
+        form = ProductRegistrationForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.user = request.user  # Link product to logged-in user
+            product.save()
+            return redirect('product-list')  # Redirect to product list page
+    return render(request, 'product_list.html')
+
+
+def product_list(request):
+    products = Product.objects.filter(user=request.user)
+    return render(request, 'product_list.html', {'products': products})
+
+
