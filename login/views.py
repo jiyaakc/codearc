@@ -115,6 +115,12 @@ def login_view(request):
 
     return render(request, "login.html")
 
+def display(request):
+         return render(request, "customer_home.html") 
+def disp(request):
+        return render(request,"agent_home.html")
+
+
 
 def display(request):
          return render(request, "customer_home.html") 
@@ -122,6 +128,7 @@ def display(request):
 
 def home(request):
     return render(request, "home.html")            
+
 
 
 
@@ -161,5 +168,4 @@ def register_product(request):
 def product_list(request):
     products = Product.objects.filter(user=request.user)
     return render(request, 'product_list.html', {'products': products})
-
 

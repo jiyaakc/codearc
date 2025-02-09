@@ -171,4 +171,9 @@ cython_debug/
 .pypirc
 
 **/migrations/
+
 !**/migrations/__init__.py
+
+
+!**/migrations/__init__.py
+
