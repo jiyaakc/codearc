@@ -9,3 +9,6 @@ class ProductRegistrationForm(forms.ModelForm):
     class Meta:
         model = ProductRegistration
         fields = ['product_name', 'model_number', 'purchase_date', 'warranty_status']
+
+
+
