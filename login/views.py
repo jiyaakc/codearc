@@ -94,5 +94,9 @@ def login_view(request):
 
     return render(request, "login.html")
 
+<<<<<<< HEAD
 def display(request):
          return render(request, "customer_home.html") 
+=======
+            
+>>>>>>> b86702c3f48211d07042032c4bd9df3a26dc595b
