@@ -27,6 +27,9 @@ def register_customer(request):
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
 
+        if CustomUser.objects.filter(email=email).exists():
+            return JsonResponse({"error": "Email already exists"}, status=400)
+
         if password != confirm_password:
             return JsonResponse({"error": "Passwords do not match"}, status=400)
 
@@ -94,9 +97,12 @@ def login_view(request):
 
     return render(request, "login.html")
 
-<<<<<<< HEAD
+
 def display(request):
          return render(request, "customer_home.html") 
-=======
+
             
->>>>>>> b86702c3f48211d07042032c4bd9df3a26dc595b
+
+def home(request):
+    return render(request, "home.html")            
+

@@ -5,8 +5,6 @@ body {
     padding: 0;
     box-sizing: border-box;
     background:#CAE0BC;
-   
-    
 }
 
 /* Navbar */
@@ -46,7 +44,7 @@ body {
 
 /* Hero Section */
 .hero {
-    background: url('images/product.png') no-repeat center center/cover;
+    background-image: url('/static/images/product.png');
     height: 50vh;
     display: flex;
     align-items: center;
