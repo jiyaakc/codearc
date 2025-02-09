@@ -10,6 +10,15 @@
 </head>
 <body>
 
+    {% if messages %}
+    <div class="error-messages">
+        {% for message in messages %}
+            <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
     <form method="POST">
         {% csrf_token %}
         <input type="text" name="pan" placeholder="PAN Number" required>
@@ -23,6 +32,10 @@
         <input type="text" name="company_name" placeholder="Company Name (Optional)">
         <button type="submit">Sign Up</button>
         <a href="{% url 'login' %}">Login</a>
+
+        <script src="{% static 'js/validate.js' %}"></script>
+
+
     </form>
 </body>
 </html>
