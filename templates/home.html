@@ -14,9 +14,18 @@
         <div class="logo">ReparoHub</div>
         <ul class="nav-links">
             <li><a href="#">Home</a></li>
-            <li><a href="#">Register Product</a></li>
+
+            <!-- Signup Dropdown -->
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Signup ▾</a>
+                <ul class="dropdown-content">
+                    <li><a href="{% url 'register_customer' %}">Signup as Customer</a></li>
+                    <li><a href="{% url 'register_agent' %}">Signup as Repair Service Provider</a></li>
+                </ul>
+            </li>
+
             <li><a href="#">Support</a></li>
-            <li><a href="#">Login/Signup</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
         </ul>
         <input type="text" class="search-bar" placeholder="Search...">
     </nav>
