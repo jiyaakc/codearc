@@ -1,18 +1,13 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "manage.py",
+    "builds": [{
+        "src": "unirepair/wsgi.py",
         "use": "@vercel/python",
-        "config": { "maxLambdaSize": "50mb" }
-      }
-    ],
+        "config": { "maxLambdaSize": "15mb", "runtime": "python3.12.3", "maxDuration": 30 }
+    }],
     "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "manage.py"
-      }
+        {
+            "src": "/(.*)",
+            "dest": "unirepair/wsgi.py"
+        }
     ]
-  }
-
-  
+}
