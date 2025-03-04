@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-)7@7#@%y=!lyu3*=51n6^2ec4pv3lhv1jnb^cbw=wcof#@%w7g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -66,12 +66,18 @@ WSGI_APPLICATION = 'unirepair.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres.hyxijjcoxtdzpozwvooh',
+        'PASSWORD': 'ZenhaFathima',
+        'HOST': 'aws-0-ap-south-1.pooler.supabase.com',  # Typically 'localhost' or an IP address
+        'PORT': '6543',  # Default is '5432' for PostgreSQL
     }
 }
+
 
 
 # Password validation

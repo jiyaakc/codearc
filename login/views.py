@@ -12,6 +12,7 @@ from .models import Product
 
 
 
+
 otp_storage = {}
 
 def send_otp(email):
@@ -41,7 +42,8 @@ def register_customer(request):
         send_otp(email)  # Send OTP
         request.session['signup_data'] = {'name': name, 'email': email, 'password': password}
         return redirect('verify_otp')
-    return render(request, 'register_customer.html')
+        return render(request, 'register_customer.html')
+
 
 def register_agent(request):
     if request.method == "POST":
@@ -52,6 +54,18 @@ def register_agent(request):
         type = request.POST['type']
         company_name = request.POST.get('company_name', '')
 
+        # PAN Validation Regex
+        pan_pattern = r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"
+        if not re.match(pan_pattern, pan_number):
+            messages.error(request, "Invalid PAN number format! Example: ABCDE1234F")
+            return redirect('register_agent')  # Stop here and show error
+
+        # Check if email already exists
+        if CustomUser.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists. Please use a different email.")
+            return redirect('register_agent')  # Stop here and show error
+
+
         if password != confirm_password:
             return JsonResponse({"error": "Passwords do not match"}, status=400)
 
@@ -59,6 +73,7 @@ def register_agent(request):
         request.session['signup_data'] = {'pan': pan_number, 'email': email, 'password': password, 'type': type, 'company_name': company_name}
         return redirect('verify_otp')
     return render(request, 'register_agent.html')
+
 
 def verify_otp(request):
     if request.method == "POST":
@@ -79,6 +94,7 @@ def verify_otp(request):
             return JsonResponse({"error": "Invalid OTP"}, status=400)
     return render(request, 'verify_otp.html')
 
+
 def login_view(request):
     if request.method == "POST":
         email = request.POST['email']
@@ -91,7 +107,11 @@ def login_view(request):
             # Redirect based on user type
             if hasattr(user, 'customerprofile'):
                 user_name = request.user.customerprofile.name
+
                 return render(request,"customer_home.html",  {'name': user_name})  # Customer home page
+
+                return render(request,"customer_home.html", {'name': user_name})  # Customer home page
+
             elif hasattr(user, 'agentprofile'):
                 return render(request,"agent_home.html")  # Agent home page
             else:
@@ -105,13 +125,47 @@ def login_view(request):
 
 
 def display(request):
+
     user_name = request.user.customerprofile.name
     
     return render(request, "customer_home.html", {'name': user_name}) 
             
 
+    return render(request, "customer_home.html") 
+
+
+def disp(request):
+        return render(request,"agent_home.html")
+         
+
+
 def home(request):
     return render(request, "home.html")            
+
+
+
+
+
+from .models import Agent
+import re
+
+def agent_signup(request):
+    if request.method == "POST":
+        pan_number = request.POST.get("pan").upper()  # Convert to uppercase
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        pattern = r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$"
+        if not re.match(pattern, pan_number):
+            messages.error(request, "Invalid PAN number format. Example: ABCDE1234F")
+            return redirect("agent_signup")
+
+        # Save if PAN is valid
+        Agent.objects.create(pan_number=pan_number, email=email, password=password)
+        messages.success(request, "Signup successful!")
+        return redirect("login")
+
+    return render(request, "signup.html")
 
 
 def register_product(request):
@@ -121,9 +175,15 @@ def register_product(request):
             product = form.save(commit=False)
             product.user = request.user.customerprofile  # Link product to logged-in user
             product.save()
+
             return redirect('product-list')  # Redirect to product list page
     form = ProductRegistrationForm()
     return render(request, 'product_reg.html',{'form': form})
+
+    return redirect('product-list')
+    form = ProductRegistrationForm()
+    return render(request, 'product_reg.html', {'form': form})
+
 
 
 def product_list(request):
